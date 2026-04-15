@@ -1,0 +1,4 @@
+# Seguranza de carpetas en Apache
+# Deniega el acceso a todos los archivos de esta carpeta
+Order deny,allow
+Deny from all

@@ -1,0 +1,126 @@
+body.login-page {
+    margin: 0;
+    padding: 0;
+    font-family: 'Montserrat', sans-serif;
+    background: #0a0a0a;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.login-container {
+    display: flex;
+    width: 900px;
+    height: 600px;
+    background: #fff;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+}
+
+.login-left {
+    flex: 1;
+    background: linear-gradient(135deg, rgba(13, 37, 63, 0.9), rgba(0, 0, 0, 0.7)), url('C:/Users/luisd/.gemini/antigravity/brain/d9d73777-0168-456a-b03e-5f1e15c68452/login_background_silvex_1776295407978.png');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    padding: 40px;
+    text-align: center;
+}
+
+.login-left h2 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+}
+
+.login-left h1 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 3.5rem;
+    margin: 0;
+    line-height: 1;
+}
+
+.login-left p {
+    margin-top: 20px;
+    font-size: 0.9rem;
+    max-width: 300px;
+    opacity: 0.8;
+}
+
+.login-right {
+    flex: 1;
+    padding: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: #ffffff;
+}
+
+.login-right h2 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 2rem;
+    color: #0d253f;
+    margin-bottom: 30px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.8rem;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.form-group input:focus {
+    border-color: #0d253f;
+}
+
+.login-btn {
+    background: #0d253f;
+    color: #fff;
+    padding: 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s;
+    margin-top: 10px;
+}
+
+.login-btn:hover {
+    background: #1a3a5f;
+}
+
+.login-footer {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: #666;
+}
+
+.login-footer a {
+    color: #0d253f;
+    text-decoration: none;
+}

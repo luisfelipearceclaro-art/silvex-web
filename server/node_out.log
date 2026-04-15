@@ -1,0 +1,5 @@
+
+> silvex-assistant-server@1.0.0 start
+> node index.js
+
+Silvex Assistant API en http://localhost:3034

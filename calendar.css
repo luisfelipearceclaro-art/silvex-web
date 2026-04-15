@@ -1,0 +1,476 @@
+/* ═══════════════════════════════════════════
+   Silvex Booking – Calendar & Step Wizard
+   ═══════════════════════════════════════════ */
+
+/* ─── Booking Container ─── */
+.booking {
+  position: relative;
+  z-index: 2;
+  margin: 1.6rem auto 5rem;
+  padding: 2.8rem 3rem 3.2rem;
+  border-radius: 1.2rem;
+  background: rgba(8, 17, 52, 0.38);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  max-width: 48rem;
+  box-shadow: 0 16px 48px rgba(2, 8, 30, 0.35);
+}
+
+.booking__title {
+  margin: 0 0 0.3rem;
+  font-family: "Barlow Condensed Local", "Barlow Condensed", sans-serif;
+  font-size: clamp(2.8rem, 4.8vw, 4.4rem);
+  line-height: 1;
+  text-align: center;
+}
+
+.booking__subtitle {
+  margin: 0 auto 2.2rem;
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 1.05rem;
+  line-height: 1.4;
+  text-align: center;
+  max-width: 32rem;
+}
+
+/* ─── Step Progress Bar ─── */
+.steps-bar {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin: 0 auto 2.4rem;
+  max-width: 32rem;
+  padding: 1rem 1.4rem;
+  border-radius: 0.8rem;
+  background: rgba(5, 14, 42, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.step-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  opacity: 0.38;
+  transition: opacity 300ms ease;
+}
+
+.step-indicator.is-active {
+  opacity: 1;
+}
+
+.step-indicator.is-done {
+  opacity: 0.72;
+}
+
+.step-indicator__num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  font-family: "Barlow Condensed Local", "Barlow Condensed", sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  transition: border-color 300ms ease, background 300ms ease;
+}
+
+.step-indicator.is-active .step-indicator__num {
+  border-color: #2ec8ef;
+  background: rgba(46, 200, 239, 0.15);
+  color: #7be8ff;
+}
+
+.step-indicator.is-done .step-indicator__num {
+  border-color: rgba(46, 200, 239, 0.4);
+  background: rgba(46, 200, 239, 0.1);
+  color: #7be8ff;
+}
+
+.step-indicator__label {
+  font-family: "Barlow Condensed Local", "Barlow Condensed", sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.step-indicator__line {
+  flex: 1;
+  height: 2px;
+  margin: 0 0.6rem;
+  background: rgba(255, 255, 255, 0.12);
+  position: relative;
+  overflow: hidden;
+}
+
+.step-indicator__line.is-filled {
+  background: rgba(46, 200, 239, 0.4);
+}
+
+/* ─── Step Panels ─── */
+.step-panel {
+  display: none;
+  animation: stepFadeIn 380ms ease both;
+}
+
+.step-panel.is-visible {
+  display: block;
+}
+
+@keyframes stepFadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.step-panel__heading {
+  margin: 0 0 1.4rem;
+  font-family: "Barlow Condensed Local", "Barlow Condensed", sans-serif;
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  line-height: 1;
+  text-align: center;
+}
+
+.step-panel__hint {
+  margin: 0 0 1rem;
+  color: #7be8ff;
+  font-size: 1.1rem;
+  font-family: "Barlow Condensed Local", "Barlow Condensed", sans-serif;
+  text-align: center;
+}
+
+/* ─── Fields ─── */
+.step-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.1rem;
+  max-width: 36rem;
+  margin: 0 auto;
+}
+
+.field {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.field--full {
+  grid-column: 1 / -1;
+}
+
+.field__label {
+  font-family: "Barlow Condensed Local", "Barlow Condensed", sans-serif;
+  font-size: 1.08rem;
+  color: rgba(255, 255, 255, 0.96);
+}
+
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 0.7rem;
+  padding: 0.72rem 0.85rem;
+  color: #fff;
+  background: rgba(5, 14, 42, 0.55);
+  font-family: "Clash Display Local", "Montserrat", sans-serif;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 200ms ease, box-shadow 200ms ease;
+}
+
+.field input::placeholder,
+.field textarea::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  border-color: rgba(46, 200, 239, 0.8);
+  box-shadow: 0 0 0 1px rgba(46, 200, 239, 0.35);
+}
+
+.field input.is-invalid,
+.field select.is-invalid,
+.field textarea.is-invalid {
+  border-color: rgba(255, 100, 100, 0.7);
+  box-shadow: 0 0 0 1px rgba(255, 100, 100, 0.3);
+}
+
+.field textarea {
+  resize: vertical;
+  min-height: 5.5rem;
+}
+
+/* ─── Step Actions ─── */
+.step-actions {
+  display: flex;
+  gap: 0.8rem;
+  margin-top: 2rem;
+  justify-content: center;
+}
+
+.cta--ghost {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: none;
+}
+
+.cta--ghost:hover {
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: none;
+}
+
+.cta--submit {
+  min-width: 13rem;
+}
+
+.cta:disabled {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+/* ─── Calendar ─── */
+.calendar {
+  max-width: 28rem;
+  margin: 0 auto;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  background: rgba(5, 14, 42, 0.45);
+  padding: 1.4rem 1.6rem;
+  backdrop-filter: blur(4px);
+}
+
+.calendar__nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.8rem;
+}
+
+.calendar__arrow {
+  border: 0;
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 0.5rem;
+  font-size: 1.3rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 180ms ease;
+}
+
+.calendar__arrow:hover {
+  background: rgba(46, 200, 239, 0.18);
+}
+
+.calendar__month {
+  font-family: "Barlow Condensed Local", "Barlow Condensed", sans-serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.calendar__weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  margin-bottom: 0.3rem;
+}
+
+.calendar__weekdays span {
+  font-family: "Barlow Condensed Local", "Barlow Condensed", sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.5);
+  padding: 0.3rem 0;
+}
+
+.calendar__grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.25rem;
+}
+
+.cal-day {
+  border: 0;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.85);
+  font-family: "Clash Display Local", "Montserrat", sans-serif;
+  font-size: 0.95rem;
+  padding: 0.55rem 0;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background 180ms ease, color 180ms ease, transform 120ms ease;
+}
+
+.cal-day:hover:not(.cal-day--disabled):not(.cal-day--empty) {
+  background: rgba(46, 200, 239, 0.15);
+  transform: scale(1.08);
+}
+
+.cal-day--empty {
+  pointer-events: none;
+}
+
+.cal-day--disabled {
+  color: rgba(255, 255, 255, 0.16);
+  pointer-events: none;
+  cursor: default;
+}
+
+.cal-day--today {
+  border: 1px solid rgba(46, 200, 239, 0.35);
+}
+
+.cal-day--selected {
+  background: linear-gradient(135deg, #3257c4, #2ec8ef);
+  color: #fff;
+  font-weight: 600;
+  transform: scale(1.08);
+  box-shadow: 0 4px 16px rgba(46, 200, 239, 0.3);
+}
+
+.calendar__selected {
+  margin: 1rem 0 0;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.6);
+  text-align: center;
+}
+
+.calendar__selected.is-set {
+  color: #7be8ff;
+  font-weight: 500;
+}
+
+/* ─── Time Slots ─── */
+.slots {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+  max-width: 28rem;
+  margin: 0 auto;
+}
+
+.slot-btn {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(5, 14, 42, 0.45);
+  color: #fff;
+  font-family: "Barlow Condensed Local", "Barlow Condensed", sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  padding: 0.85rem 0.5rem;
+  border-radius: 0.65rem;
+  cursor: pointer;
+  transition: border-color 180ms ease, background 180ms ease, transform 120ms ease, box-shadow 180ms ease;
+  text-align: center;
+}
+
+.slot-btn:hover:not(:disabled) {
+  border-color: rgba(46, 200, 239, 0.4);
+  background: rgba(46, 200, 239, 0.1);
+  transform: translateY(-1px);
+}
+
+.slot-btn.is-selected {
+  background: linear-gradient(135deg, #3257c4, #2ec8ef);
+  border-color: transparent;
+  box-shadow: 0 4px 16px rgba(46, 200, 239, 0.3);
+  transform: translateY(-1px);
+}
+
+.slot-btn:disabled {
+  opacity: 0.25;
+  pointer-events: none;
+}
+
+.slot-btn__range {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.55);
+  margin-top: 0.15rem;
+  font-family: "Clash Display Local", "Montserrat", sans-serif;
+}
+
+.slot-btn.is-selected .slot-btn__range {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* ─── Booking Summary ─── */
+.booking-summary {
+  margin: 1.6rem auto 0;
+  padding: 1.1rem 1.4rem;
+  border-radius: 0.8rem;
+  border: 1px solid rgba(46, 200, 239, 0.2);
+  background: rgba(46, 200, 239, 0.05);
+  max-width: 36rem;
+}
+
+.booking-summary__title {
+  margin: 0 0 0.6rem;
+  font-family: "Barlow Condensed Local", "Barlow Condensed", sans-serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #7be8ff;
+}
+
+.booking-summary__row {
+  margin: 0.25rem 0;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.booking-summary__row strong {
+  color: #fff;
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 960px) {
+  .booking {
+    margin: 1rem 1.2rem 2rem;
+    padding: 1.2rem;
+  }
+
+  .step-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .calendar {
+    max-width: 100%;
+  }
+
+  .slots {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    max-width: 100%;
+  }
+
+  .step-indicator__label {
+    display: none;
+  }
+
+  .step-indicator__line {
+    margin: 0 0.3rem;
+  }
+
+  .steps-bar {
+    margin-bottom: 1.4rem;
+  }
+
+  .step-actions {
+    flex-direction: column;
+  }
+
+  .step-actions .cta {
+    width: 100%;
+  }
+}
+
+@media (max-width: 560px) {
+  .slots {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
