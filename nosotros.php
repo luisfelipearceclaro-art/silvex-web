@@ -11,19 +11,7 @@ include 'header.php';
       </div>
       
       <div class="about-hero__text-right">
-        <p>
-          Desde el inicio, nuestra visión
-          ha sido potenciar el brillo
-          único de cada marca,
-          creando estrategias y
-          diseños que no solo llamen la
-          atención, sino que generen
-          impacto real. Creemos que
-          cada proyecto es una
-          oportunidad para
-          transformar ideas en
-          experiencias memorables.
-        </p>
+        <p></p>
       </div>
 
       <div class="about-hero__text-bottom">

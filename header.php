@@ -22,7 +22,7 @@ if (!isset($base_path)) {
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="<?php echo $base_path; ?>styles.css?v=21">
+  <link rel="stylesheet" href="<?php echo $base_path; ?>styles.css?v=29">
   <link rel="stylesheet" href="<?php echo $base_path; ?>mobile.css">
   <?php echo isset($extra_head) ? $extra_head : ''; ?>
 </head>
@@ -39,8 +39,6 @@ if (!isset($base_path)) {
         <a class="<?php echo ($current_page == 'servicios') ? 'is-active' : ''; ?>" href="<?php echo $base_path; ?>servicios.php">Servicios</a>
         <a class="<?php echo ($current_page == 'portafolio') ? 'is-active' : ''; ?>" href="<?php echo $base_path; ?>portafolio.php">Portafolio</a>
         <a class="<?php echo ($current_page == 'contactanos') ? 'is-active' : ''; ?>" href="<?php echo $base_path; ?>contactanos.php">Contáctanos</a>
-        <hr style="border: none; border-left: 1px solid rgba(255,255,255,0.2); height: 20px; margin: 0 10px;">
-        
         <?php if (isset($_SESSION['user_role'])): ?>
             <?php if ($_SESSION['user_role'] === 'admin'): ?>
                 <a class="<?php echo ($current_page == 'admin') ? 'is-active' : ''; ?>" href="<?php echo $base_path; ?>admin/index.php">Admin</a>

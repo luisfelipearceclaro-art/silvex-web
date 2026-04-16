@@ -8,8 +8,40 @@ import { google } from "googleapis";
 dotenv.config();
 
 const app = express();
-app.use(cors());
+const rawAllowedOrigins = String(process.env.CORS_ALLOWED_ORIGINS || "");
+const allowedOrigins = rawAllowedOrigins
+  .split(",")
+  .map((item) => item.trim())
+  .filter(Boolean);
+const defaultAllowedOrigins = [
+  "http://localhost",
+  "http://127.0.0.1",
+  "http://localhost:3000",
+  "http://127.0.0.1:3000",
+  "http://localhost:3001",
+  "http://127.0.0.1:3001",
+  "http://localhost:3002",
+  "http://127.0.0.1:3002",
+  "http://localhost:3034",
+  "http://127.0.0.1:3034"
+];
+const corsAllowlist = new Set(allowedOrigins.length ? allowedOrigins : defaultAllowedOrigins);
+app.use(
+  cors({
+    origin(origin, callback) {
+      if (!origin) return callback(null, true);
+      if (corsAllowlist.has(origin)) return callback(null, true);
+      return callback(new Error("CORS origin blocked"));
+    }
+  })
+);
 app.use(express.json({ limit: "1mb" }));
+app.use((req, res, next) => {
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  res.setHeader("X-Frame-Options", "DENY");
+  res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
+  next();
+});
 
 const port = Number(process.env.PORT || 3001);
 const geminiApiKey = process.env.GEMINI_API_KEY || "";
@@ -46,6 +78,24 @@ const igNotifyWebhookToken = process.env.IG_NOTIFY_WEBHOOK_TOKEN || "";
 // Integración Telegram Bot
 const telegramBotToken = process.env.TELEGRAM_BOT_TOKEN || "";
 const telegramChatId = process.env.TELEGRAM_CHAT_ID || "";
+const isPublicAgendaEnabled = String(process.env.PUBLIC_MEETINGS_AGENDA || "true").toLowerCase() === "true";
+
+const rateStore = new Map();
+function isRateLimited(req, bucket, { windowMs, maxHits }) {
+  const now = Date.now();
+  const ip = String(req.headers["x-forwarded-for"] || req.socket.remoteAddress || "unknown")
+    .split(",")[0]
+    .trim();
+  const key = `${bucket}:${ip}`;
+  const entry = rateStore.get(key);
+  if (!entry || now > entry.resetAt) {
+    rateStore.set(key, { count: 1, resetAt: now + windowMs });
+    return false;
+  }
+  entry.count += 1;
+  if (entry.count > maxHits) return true;
+  return false;
+}
 
 // Persistencia en JSON local
 const DATA_FILE = path.join(process.cwd(), "data", "meetings.json");
@@ -262,6 +312,10 @@ app.get("/api/health", (_req, res) => {
 
 app.post("/api/chat", async (req, res) => {
   try {
+    if (isRateLimited(req, "chat", { windowMs: 60_000, maxHits: 40 })) {
+      return res.status(429).json({ error: "Demasiadas solicitudes. Intenta en un minuto." });
+    }
+
     if (!geminiApiKey) {
       return res.status(503).json({ error: "Gemini no esta configurado aun" });
     }
@@ -321,6 +375,10 @@ app.post("/api/chat", async (req, res) => {
 
 app.post("/api/meetings", async (req, res) => {
   try {
+    if (isRateLimited(req, "meetings_post", { windowMs: 60_000, maxHits: 20 })) {
+      return res.status(429).json({ error: "Demasiadas solicitudes. Intenta en un minuto." });
+    }
+
     const payload = sanitizeMeetingPayload(req.body || {});
     const validationError = validateMeetingPayload(payload);
     if (validationError) {
@@ -375,9 +433,16 @@ app.post("/api/meetings", async (req, res) => {
 });
 
 app.get("/api/meetings", (req, res) => {
+  if (isRateLimited(req, "meetings_get", { windowMs: 60_000, maxHits: 60 })) {
+    return res.status(429).json({ error: "Demasiadas solicitudes. Intenta en un minuto." });
+  }
+
   const date = req.query.date;
   if (!date) {
     return res.status(400).json({ error: "Falta el parametro date" });
+  }
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(String(date))) {
+    return res.status(400).json({ error: "Formato de fecha invalido. Usa YYYY-MM-DD" });
   }
 
   try {
@@ -397,6 +462,13 @@ app.get("/api/meetings", (req, res) => {
 
 app.get("/api/meetings/agenda", (req, res) => {
   try {
+    if (!isPublicAgendaEnabled) {
+      return res.status(403).json({ error: "Agenda publica deshabilitada" });
+    }
+    if (isRateLimited(req, "meetings_agenda", { windowMs: 60_000, maxHits: 60 })) {
+      return res.status(429).json({ error: "Demasiadas solicitudes. Intenta en un minuto." });
+    }
+
     const meetings = getMeetings();
     
     // Solo mostrar reuniones futuras

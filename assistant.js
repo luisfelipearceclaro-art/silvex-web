@@ -534,7 +534,7 @@
             <strong>Asesor Virtual Silvex</strong>
             <p>Estrategia comercial para tu marca</p>
           </div>
-          <button type="button" class="svx-chat__close" data-chat-close aria-label="Cerrar chat">Ã—</button>
+          <button type="button" class="svx-chat__close" data-chat-close aria-label="Cerrar chat">&times;</button>
         </div>
         <div class="svx-chat__quick"></div>
         <div class="svx-chat__thread" data-chat-thread></div>

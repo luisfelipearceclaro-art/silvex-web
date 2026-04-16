@@ -36,6 +36,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <link rel="stylesheet" href="login.css">
 </head>
 <body class="login-page">
+    <video class="login-bg-video" autoplay muted loop playsinline>
+        <source src="./assets/videos/login-outer-bg.mp4" type="video/mp4">
+    </video>
+    <div class="login-bg-overlay" aria-hidden="true"></div>
     <div class="login-container">
         <div class="login-left">
             <h2>Nice to see you again</h2>

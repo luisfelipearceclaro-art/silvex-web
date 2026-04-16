@@ -18,3 +18,7 @@ server/data/meetings.json
 # Sistema
 .DS_Store
 Thumbs.db
+
+# Logs runtime
+server/node_out.log
+server/node_err.log

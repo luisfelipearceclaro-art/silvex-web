@@ -8,10 +8,7 @@ include 'header.php';
 
     <section class="page-panel page-panel--portfolio">
       <h1>Nuestros Casos de Éxito</h1>
-      <p>
-        En Silvex no solo diseñamos, resolvemos problemas de negocio.
-        Aquí tienes una selección de marcas que han transformado su presencia digital con nosotros.
-      </p>
+      <p></p>
     </section>
 
     <section class="portfolio-grid">
@@ -46,7 +43,6 @@ include 'header.php';
 
     <section class="portfolio-cta">
         <h2>¿Quieres ser nuestro próximo éxito?</h2>
-        <p>Llevamos tu marca del diseño al impacto real.</p>
         <a href="contactanos.php" class="cta">Habla con nosotros</a>
     </section>
   </main>

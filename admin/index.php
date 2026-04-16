@@ -9,23 +9,27 @@ $body_class = "page-admin";
 include '../header.php';
 ?>
 
-<section class="hero__content">
+<section class="page-panel animate-liquid">
     <h1>Administrador</h1>
-    <div class="hero__divider" aria-hidden="true"></div>
     <p>Bienvenido al Panel de Control de Silvex.</p>
     
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 40px;">
-        <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1);">
-            <h3>Gestión de Clientes</h3>
-            <p>Administra los clientes activos y sus campañas.</p>
+    <div class="plans-grid" style="margin-top: 3rem;">
+        <div class="plan-card">
+            <h3 class="plan-card__title" style="font-size: 1.8rem;">Gestión de Clientes</h3>
+            <p class="plan-card__subtitle">Administra los clientes activos y sus campañas publicitarias.</p>
+            <a href="#" class="cta" style="margin-top: 1rem; font-size: 1rem; min-width: auto;">Ver Clientes</a>
         </div>
-        <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1);">
-            <h3>Métricas de Publicidad</h3>
-            <p>Visualiza el rendimiento global de las marcas.</p>
+        
+        <div class="plan-card">
+            <h3 class="plan-card__title" style="font-size: 1.8rem;">Métricas de Publicidad</h3>
+            <p class="plan-card__subtitle">Visualiza el rendimiento global de todas las marcas bajo gestión.</p>
+            <a href="#" class="cta" style="margin-top: 1rem; font-size: 1rem; min-width: auto;">Ver Reportes</a>
         </div>
-        <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1);">
-            <h3>Configuración</h3>
-            <p>Ajustes generales del sistema.</p>
+        
+        <div class="plan-card">
+            <h3 class="plan-card__title" style="font-size: 1.8rem;">Configuración</h3>
+            <p class="plan-card__subtitle">Ajustes generales del sistema, accesos y parámetros globales.</p>
+            <a href="#" class="cta" style="margin-top: 1rem; font-size: 1rem; min-width: auto;">Ajustes</a>
         </div>
     </div>
 </section>
