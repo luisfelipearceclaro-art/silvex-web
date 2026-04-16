@@ -1,7 +1,6 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+require_once __DIR__ . '/security.php';
+silvex_bootstrap_security();
 if (!isset($page_title)) {
     $page_title = "Silvex Estudio";
 }
@@ -56,7 +55,7 @@ if (!isset($base_path)) {
             <?php if ($_SESSION['user_role'] === 'admin'): ?>
             <?php else: ?>
             <?php endif; ?>
-            <a class="nav-auth-button nav-logout-button" href="<?php echo $base_path; ?>logout.php">Cerrar Sesi&oacute;n</a>
+            <a class="nav-auth-button nav-logout-button" href="<?php echo htmlspecialchars(silvex_logout_url($base_path), ENT_QUOTES, 'UTF-8'); ?>">Cerrar Sesi&oacute;n</a>
         <?php else: ?>
             <a class="nav-auth-button nav-login-button" href="<?php echo $base_path; ?>login.php">Ingresar</a>
         <?php endif; ?>

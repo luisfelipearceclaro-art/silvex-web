@@ -54,7 +54,7 @@ include '../header.php';
         ?>
         <div class="premium-glass" style="display: block; padding: 1.5rem; border-radius: 20px; position: relative;">
             <div style="position: absolute; top: 1rem; right: 1rem;">
-                <span style="font-size: 0.65rem; padding: 0.2rem 0.6rem; border-radius: 10px; background: rgba(255,255,255,0.1); border: 1px solid <?php echo $statusColor; ?>; color: <?php echo $statusColor; ?>; font-weight: 700; text-transform: uppercase;">
+                <span style="font-size: 0.65rem; padding: 0.2rem 0.6rem; border-radius: 10px; background: rgba(255,255,255,0.1); color: <?php echo $statusColor; ?>; font-weight: 700; text-transform: uppercase;">
                     <?php echo $status; ?>
                 </span>
             </div>

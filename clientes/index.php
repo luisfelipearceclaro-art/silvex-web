@@ -4,12 +4,21 @@ include '../auth.php';
 include '../data_helper.php';
 check_auth('cliente');
 
-$userEmail = $_SESSION['user_email'] ?? 'cliente@silvex.com';
-$client = DataHelper::findOneBy('clients.json', 'email', $userEmail);
+$clientId = $_SESSION['client_id'] ?? null;
+$clientName = $_SESSION['client_name'] ?? 'Cliente';
 $projects = [];
 
-if ($client) {
-    $projects = DataHelper::findBy('projects.json', 'clientId', $client['id']);
+if ($clientId) {
+    $client = DataHelper::findOneBy('clients.json', 'id', $clientId);
+    $projects = DataHelper::findBy('projects.json', 'clientId', $clientId);
+} else {
+    // Fallback por si la sesión no tiene el ID (viejas sesiones)
+    $userEmail = $_SESSION['user_email'] ?? '';
+    $client = DataHelper::findOneBy('clients.json', 'email', $userEmail);
+    if ($client) {
+        $projects = DataHelper::findBy('projects.json', 'clientId', $client['id']);
+        $clientName = $client['name'];
+    }
 }
 
 $page_title = "Silvex | Portal de Clientes";

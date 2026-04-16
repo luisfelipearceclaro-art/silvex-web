@@ -80,7 +80,7 @@ include '../header.php';
         <div class="plan-card">
             <h3 class="plan-card__title" style="font-size: 1.8rem;">Configuración</h3>
             <p class="plan-card__subtitle">Ajustes globales del sistema, PIN de seguridad y parámetros.</p>
-            <a href="#" class="cta" style="margin-top: 1rem; font-size: 1rem; min-width: auto;">Ajustes</a>
+            <a href="settings.php" class="cta" style="margin-top: 1rem; font-size: 1rem; min-width: auto;">Ajustes</a>
         </div>
     </div>
 </section>

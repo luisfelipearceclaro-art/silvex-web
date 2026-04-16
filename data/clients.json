@@ -3,6 +3,8 @@
     "id": "c1",
     "name": "Cliente Demo",
     "email": "cliente@silvex.com",
+    "login_email": "clientedemo@silvex.com",
+    "password": "Silvex2024",
     "company": "Silvex Test Corp",
     "status": "activo",
     "joined": "2024-04-10"
@@ -11,6 +13,8 @@
     "id": "c2",
     "name": "Empresa ABC",
     "email": "contacto@abc.com",
+    "login_email": "empresaabc@silvex.com",
+    "password": "Silvex2024",
     "company": "Corporativo ABC",
     "status": "activo",
     "joined": "2024-04-12"

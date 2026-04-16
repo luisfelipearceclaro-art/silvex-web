@@ -10,6 +10,7 @@ define('BACKUP_PATH', DATA_PATH . 'backups/');
 
 // Seguridad
 define('ADMIN_PIN', '123'); // Puedes cambiar esto por una contraseña más fuerte
+define('DEFAULT_CLIENT_PASSWORD', 'Silvex2024'); // Contraseña inicial para todos los clientes
 
 // Estética y UI
 define('CRM_VERSION', '2.0.0');

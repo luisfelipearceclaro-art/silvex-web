@@ -8,18 +8,27 @@ $clients = DataHelper::read('clients.json');
 
 // Handle New Client Creation
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'new_client') {
+    $name = trim($_POST['name']);
+    
+    // Generar email de acceso (slugify nombre + @silvex.com)
+    $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '', $name)));
+    $login_email = $slug . "@silvex.com";
+
     $newClient = [
         'id' => 'c' . (count($clients) + 1) . '_' . time(),
-        'name' => trim($_POST['name']),
-        'email' => trim($_POST['email']),
+        'name' => $name,
+        'email' => trim($_POST['email']), // Email personal
+        'login_email' => $login_email,    // Email de acceso al sistema
+        'password' => DEFAULT_CLIENT_PASSWORD,
         'company' => trim($_POST['company']),
         'status' => 'activo',
         'joined' => date('Y-m-d')
     ];
-    
+
     $clients[] = $newClient;
     DataHelper::write('clients.json', $clients);
-    $success_msg = "Cliente '" . $newClient['company'] . "' añadido correctamente.";
+    
+    $success_msg = "✓ Cliente creado.<br><strong>Acceso generado:</strong> $login_email<br><strong>Contraseña:</strong> " . DEFAULT_CLIENT_PASSWORD;
 }
 
 $page_title = "Silvex | Listado de Clientes";
@@ -31,45 +40,18 @@ include '../header.php';
 <section class="page-panel page-panel--full animate-liquid">
     <?php if (isset($success_msg)): ?>
         <div style="background: rgba(76, 175, 80, 0.2); color: #81c784; padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem; border: 1px solid rgba(76, 175, 80, 0.3);">
-            ✓ <?php echo $success_msg; ?>
+            + <?php echo htmlspecialchars($success_msg, ENT_QUOTES, 'UTF-8'); ?>
         </div>
     <?php endif; ?>
 
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; gap: 1rem; flex-wrap: wrap;">
         <div>
-            <h1>Gestión de Clientes</h1>
-            <p>Listado de marcas y contactos bajo gestión activa.</p>
+            <h1>Gesti&oacute;n de Clientes</h1>
+            <p>Listado de marcas y contactos bajo gesti&oacute;n activa.</p>
         </div>
         <div style="flex-shrink: 0; display: flex; gap: 1rem;">
             <button type="button" onclick="document.getElementById('client-modal').style.display='flex'" class="cta" style="min-width: auto; box-shadow: none; border: none;">+ Nuevo Cliente</button>
             <a href="index.php" class="cta" style="min-width: auto; background: rgba(255,255,255,0.1);">Volver</a>
-        </div>
-    </div>
-
-    <!-- Modal Nuevo Cliente -->
-    <div id="client-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 1000; justify-content: center; align-items: center; padding: 1rem;">
-        <div class="premium-glass" style="width: 100%; max-width: 500px; padding: 2rem; position: relative; border-radius: 30px;">
-            <h2 style="margin-bottom: 1.5rem; color: #2ec8ef;">Agregar Nuevo Cliente</h2>
-            <form method="POST">
-                <input type="hidden" name="action" value="new_client">
-                <div style="margin-bottom: 1.2rem;">
-                    <label style="display: block; font-size: 0.8rem; opacity: 0.7; margin-bottom: 0.4rem;">Nombre de la Empresa</label>
-                    <input type="text" name="company" required placeholder="Ej: Silvex Estudio" style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 0.8rem; color: #fff; outline: none;">
-                </div>
-                <div style="margin-bottom: 1.2rem;">
-                    <label style="display: block; font-size: 0.8rem; opacity: 0.7; margin-bottom: 0.4rem;">Nombre del Contacto</label>
-                    <input type="text" name="name" required placeholder="Ej: Luis Arce" style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 0.8rem; color: #fff; outline: none;">
-                </div>
-                <div style="margin-bottom: 2rem;">
-                    <label style="display: block; font-size: 0.8rem; opacity: 0.7; margin-bottom: 0.4rem;">Correo Electrónico</label>
-                    <input type="email" name="email" required placeholder="cliente@ejemplo.com" style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 0.8rem; color: #fff; outline: none;">
-                </div>
-                
-                <div style="display: flex; gap: 1rem;">
-                    <button type="submit" class="cta" style="flex: 1;">Guardar Cliente</button>
-                    <button type="button" onclick="document.getElementById('client-modal').style.display='none'" class="cta" style="flex: 1; background: rgba(255,255,255,0.1);">Cancelar</button>
-                </div>
-            </form>
         </div>
     </div>
 
@@ -108,7 +90,7 @@ include '../header.php';
                 <?php endforeach; ?>
                 <?php if (empty($clients)): ?>
                 <tr>
-                    <td colspan="5" style="padding: 3rem; text-align: center; opacity: 0.5;">No hay clientes registrados aún.</td>
+                    <td colspan="5" style="padding: 3rem; text-align: center; opacity: 0.5;">No hay clientes registrados a&uacute;n.</td>
                 </tr>
                 <?php endif; ?>
             </tbody>
@@ -116,4 +98,31 @@ include '../header.php';
     </div>
 </section>
 
+<div id="client-modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 1000; justify-content: center; align-items: center; padding: 1rem; overflow-y: auto;">
+    <div class="premium-glass" style="width: 100%; max-width: 500px; max-height: calc(100vh - 2rem); padding: 2rem; position: relative; border-radius: 30px; overflow-y: auto;">
+        <h2 style="margin-bottom: 1.5rem; color: #2ec8ef;">Agregar Nuevo Cliente</h2>
+        <form method="POST">
+            <input type="hidden" name="action" value="new_client">
+            <div style="margin-bottom: 1.2rem;">
+                <label style="display: block; font-size: 0.8rem; opacity: 0.7; margin-bottom: 0.4rem;">Nombre de la Empresa</label>
+                <input type="text" name="company" required placeholder="Ej: Silvex Estudio" style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 0.8rem; color: #fff; outline: none;">
+            </div>
+            <div style="margin-bottom: 1.2rem;">
+                <label style="display: block; font-size: 0.8rem; opacity: 0.7; margin-bottom: 0.4rem;">Nombre del Contacto</label>
+                <input type="text" name="name" required placeholder="Ej: Luis Arce" style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 0.8rem; color: #fff; outline: none;">
+            </div>
+            <div style="margin-bottom: 2rem;">
+                <label style="display: block; font-size: 0.8rem; opacity: 0.7; margin-bottom: 0.4rem;">Correo Electr&oacute;nico</label>
+                <input type="email" name="email" required placeholder="cliente@ejemplo.com" style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 0.8rem; color: #fff; outline: none;">
+            </div>
+
+            <div style="display: flex; gap: 1rem;">
+                <button type="submit" class="cta" style="flex: 1;">Guardar Cliente</button>
+                <button type="button" onclick="document.getElementById('client-modal').style.display='none'" class="cta" style="flex: 1; background: rgba(255,255,255,0.1);">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <?php include '../footer.php'; ?>
+
