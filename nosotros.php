@@ -29,7 +29,7 @@ include 'header.php';
       </div>
 
       <div class="about-hero__owl" aria-hidden="true">
-        <img src="assets/images/buho-nosotros.png" alt="Abrir chat con el asesor virtual" data-open-chat>
+        <img src="assets/images/buho-nosotros.png" alt="Sivaro, asesor virtual de Silvex">
       </div>
     </section>
 

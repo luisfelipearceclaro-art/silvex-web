@@ -30,13 +30,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><?php echo $page_title; ?></title>
   <link rel="icon" type="image/png" href="assets/logo/silvex-logo.png">
+  <link rel="preload" href="./assets/videos/login-outer-bg.mp4" as="video" type="video/mp4">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="login.css">
 </head>
 <body class="login-page">
-    <video class="login-bg-video" autoplay muted loop playsinline>
+    <video class="login-bg-video" autoplay muted loop playsinline preload="auto" poster="./assets/textures/login-outer-bg.jpg">
         <source src="./assets/videos/login-outer-bg.mp4" type="video/mp4">
     </video>
     <div class="login-bg-overlay" aria-hidden="true"></div>
@@ -64,7 +65,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <label style="font-size: 0.8rem; color: #666; display: flex; align-items: center;">
                         <input type="checkbox" style="margin-right: 5px;"> Keep me signed in
                     </label>
-                    <a href="#" style="font-size: 0.8rem; color: #0d253f; text-decoration: none;">Forgot?</a>
                 </div>
                 <button type="submit" class="login-btn">LOGIN</button>
             </form>

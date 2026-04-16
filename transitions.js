@@ -1,5 +1,5 @@
 (() => {
-  const DURATION_MS = 450;
+  const DURATION_MS = 250;
 
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (reduceMotion) {
@@ -13,12 +13,16 @@
     return url.origin === window.location.origin && url.pathname !== window.location.pathname;
   };
 
-  window.addEventListener("pageshow", () => {
+  window.addEventListener("pageshow", (event) => {
+    document.documentElement.classList.remove("page-leaving");
     document.documentElement.classList.add("page-ready");
   });
 
-  requestAnimationFrame(() => {
-    document.documentElement.classList.add("page-ready");
+  // Initial show
+  document.addEventListener("DOMContentLoaded", () => {
+    requestAnimationFrame(() => {
+      document.documentElement.classList.add("page-ready");
+    });
   });
 
   document.addEventListener("click", (event) => {

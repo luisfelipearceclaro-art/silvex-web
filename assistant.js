@@ -8,10 +8,12 @@
     email: "luisdavid.arcecortes@gmail.com",
     instagram: "https://www.instagram.com/silvex_estudio/",
   };
-  const AVATAR_SRC = "assets/images/buho-silvex.png";
+  const BASE_PATH = document.body?.dataset?.basePath || "";
+  const AVATAR_SRC = `${BASE_PATH}assets/Images/buho-silvex.png`;
 
   const LEADS_KEY = "silvex_assistant_leads_v2";
   const CHAT_KEY = "silvex_assistant_chat_v2";
+  const CHAT_POSITION_KEY = "silvex_assistant_widget_position_v1";
 
   const PLANS = [
     {
@@ -62,8 +64,17 @@
 
   function saveLead(lead) {
     const leads = JSON.parse(localStorage.getItem(LEADS_KEY) || "[]");
-    leads.push({ ...lead, createdAt: new Date().toISOString() });
+    const leadData = { ...lead, createdAt: new Date().toISOString() };
+    leads.push(leadData);
     localStorage.setItem(LEADS_KEY, JSON.stringify(leads));
+
+    // Send to server
+    const baseUrl = window.SILVEX_API_BASE || "http://localhost:3034";
+    fetch(`${baseUrl}/api/leads`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(leadData)
+    }).catch(err => console.error("Error saving lead to server:", err));
   }
 
   function saveChat(messages) {
@@ -510,6 +521,7 @@
     if (toggle && panel) {
       toggle.addEventListener("click", () => {
         root.classList.toggle("is-open");
+        if (root.classList.contains("is-open") && input) input.focus();
       });
     }
 
@@ -527,6 +539,9 @@
     wrapper.className = "svx-chat-widget";
     wrapper.setAttribute("aria-label", "Asistente virtual Silvex");
     wrapper.innerHTML = `
+      <button type="button" class="svx-chat-widget__toggle" data-chat-toggle aria-label="Abrir chat con Sivaro">
+        <img class="svx-chat-widget__toggle-avatar" src="${AVATAR_SRC}" alt="Sivaro">
+      </button>
       <div class="svx-chat-widget__panel" data-chat-panel>
         <div class="svx-chat__header">
           <img class="svx-chat__avatar" src="${AVATAR_SRC}" alt="Asistente Silvex">
@@ -551,7 +566,104 @@
     const widget = buildWidgetMarkup();
     document.body.appendChild(widget);
     initChat(widget, { fixed: false });
+    makeWidgetDraggable(widget);
     return widget;
+  }
+
+  function clamp(value, min, max) {
+    return Math.min(Math.max(value, min), max);
+  }
+
+  function makeWidgetDraggable(widget) {
+    const toggle = widget.querySelector("[data-chat-toggle]");
+    if (!toggle) return;
+
+    let dragState = null;
+    let suppressClick = false;
+
+    try {
+      const saved = JSON.parse(localStorage.getItem(CHAT_POSITION_KEY) || "null");
+      if (saved && Number.isFinite(saved.left) && Number.isFinite(saved.top)) {
+        widget.style.left = `${saved.left}px`;
+        widget.style.top = `${saved.top}px`;
+        widget.style.right = "auto";
+        widget.style.bottom = "auto";
+      }
+    } catch (_) {
+      // ignore invalid saved position
+    }
+
+    function savePosition(left, top) {
+      localStorage.setItem(CHAT_POSITION_KEY, JSON.stringify({ left, top }));
+    }
+
+    function onPointerMove(event) {
+      if (!dragState || dragState.pointerId !== event.pointerId) return;
+
+      const deltaX = event.clientX - dragState.startX;
+      const deltaY = event.clientY - dragState.startY;
+
+      if (!dragState.moved && Math.hypot(deltaX, deltaY) > 6) {
+        dragState.moved = true;
+        widget.classList.add("is-dragging");
+      }
+
+      if (!dragState.moved) return;
+
+      const toggleRect = toggle.getBoundingClientRect();
+      const maxLeft = window.innerWidth - toggleRect.width;
+      const maxTop = window.innerHeight - toggleRect.height;
+      const nextLeft = clamp(dragState.startLeft + deltaX, 0, maxLeft);
+      const nextTop = clamp(dragState.startTop + deltaY, 0, maxTop);
+
+      widget.style.left = `${nextLeft}px`;
+      widget.style.top = `${nextTop}px`;
+    }
+
+    function endDrag(event) {
+      if (!dragState || dragState.pointerId !== event.pointerId) return;
+
+      if (dragState.moved) {
+        const rect = widget.getBoundingClientRect();
+        savePosition(rect.left, rect.top);
+        suppressClick = true;
+      }
+
+      widget.classList.remove("is-dragging");
+      window.removeEventListener("pointermove", onPointerMove);
+      window.removeEventListener("pointerup", endDrag);
+      window.removeEventListener("pointercancel", endDrag);
+      dragState = null;
+    }
+
+    toggle.addEventListener("pointerdown", (event) => {
+      const rect = toggle.getBoundingClientRect();
+      dragState = {
+        pointerId: event.pointerId,
+        startX: event.clientX,
+        startY: event.clientY,
+        startLeft: rect.left,
+        startTop: rect.top,
+        moved: false
+      };
+
+      toggle.setPointerCapture(event.pointerId);
+      widget.style.left = `${rect.left}px`;
+      widget.style.top = `${rect.top}px`;
+      widget.style.right = "auto";
+      widget.style.bottom = "auto";
+      window.addEventListener("pointermove", onPointerMove);
+      window.addEventListener("pointerup", endDrag);
+      window.addEventListener("pointercancel", endDrag);
+    });
+
+    toggle.addEventListener("click", (event) => {
+      if (suppressClick) {
+        event.preventDefault();
+        event.stopPropagation();
+        suppressClick = false;
+      }
+    }, true);
   }
 
   function initFixedAssistant() {

@@ -1,0 +1,26 @@
+[
+  {
+    "id": "p1",
+    "clientId": "c1",
+    "name": "Campaña Lanzamiento 2024",
+    "status": "En Ejecución",
+    "progress": 65,
+    "lastUpdate": "2024-04-15"
+  },
+  {
+    "id": "p2",
+    "clientId": "c1",
+    "name": "Gestión Redes Sociales",
+    "status": "Iniciado",
+    "progress": 20,
+    "lastUpdate": "2024-04-16"
+  },
+  {
+    "id": "p3",
+    "clientId": "c2",
+    "name": "Branding Corporativo",
+    "status": "Finalizado",
+    "progress": 100,
+    "lastUpdate": "2024-04-12"
+  }
+]

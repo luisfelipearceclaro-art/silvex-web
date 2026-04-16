@@ -1,0 +1,18 @@
+[
+  {
+    "id": "c1",
+    "name": "Cliente Demo",
+    "email": "cliente@silvex.com",
+    "company": "Silvex Test Corp",
+    "status": "activo",
+    "joined": "2024-04-10"
+  },
+  {
+    "id": "c2",
+    "name": "Empresa ABC",
+    "email": "contacto@abc.com",
+    "company": "Corporativo ABC",
+    "status": "activo",
+    "joined": "2024-04-12"
+  }
+]

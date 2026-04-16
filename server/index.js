@@ -120,6 +120,21 @@ function isSameMeetingSlot(a, b) {
   return a.meetingDate === b.meetingDate && a.meetingTime === b.meetingTime;
 }
 
+// Persistencia de Leads
+const LEADS_FILE = path.join(process.cwd(), "data", "leads.json");
+if (!fs.existsSync(LEADS_FILE)) {
+  fs.writeFileSync(LEADS_FILE, "[]", "utf-8");
+}
+
+function getLeads() {
+  try {
+    const data = fs.readFileSync(LEADS_FILE, "utf-8");
+    return JSON.parse(data);
+  } catch (error) {
+    return [];
+  }
+}
+
 function saveMeetingIfSlotAvailable(meeting) {
   const meetings = getMeetings();
   const takenSlot = meetings.find((item) => isSameMeetingSlot(item, meeting));
@@ -508,6 +523,23 @@ app.get("/api/meetings/agenda", (req, res) => {
     console.error("GET /api/meetings/agenda error", error);
     res.status(500).json({ error: "No se pudo obtener la agenda pÃºblica" });
   }
+});
+
+app.get("/api/leads", (req, res) => {
+  const leads = getLeads();
+  res.json({ leads });
+});
+
+app.post("/api/leads", (req, res) => {
+  const leads = getLeads();
+  const newLead = {
+    ...req.body,
+    id: Date.now().toString(),
+    createdAt: new Date().toISOString()
+  };
+  leads.push(newLead);
+  fs.writeFileSync(LEADS_FILE, JSON.stringify(leads, null, 2), "utf-8");
+  res.json({ ok: true, lead: newLead });
 });
 
 app.listen(port, () => {

@@ -31,7 +31,7 @@ include 'header.php';
     </section>
 
     <div class="hero__owl-slot">
-      <img class="hero__owl-image" src="assets/images/buho-silvex.png" alt="Abrir chat con el asistente" data-open-chat>
+      <img class="hero__owl-image" src="assets/images/buho-silvex.png" alt="Sivaro, asistente virtual de Silvex">
     </div>
   </main>
 
