@@ -36,12 +36,15 @@ include '../header.php';
         </div>
     <?php endif; ?>
 
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
         <div>
             <h1>Leads del Asistente</h1>
             <p>Personas interesadas captadas por Sivaro (IA).</p>
         </div>
-        <a href="index.php" class="cta" style="min-width: auto; background: rgba(255,255,255,0.1);">Volver</a>
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+            <a href="export.php?type=leads" class="cta" style="min-width: auto; background: rgba(46,200,239,0.15); border: 1px solid rgba(46,200,239,0.3);" title="Descargar CSV con todos los leads">⬇ Exportar CSV</a>
+            <a href="index.php" class="cta" style="min-width: auto; background: rgba(255,255,255,0.1);">Volver</a>
+        </div>
     </div>
 
     <div class="leads-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 1.5rem;">

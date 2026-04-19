@@ -1,0 +1,30 @@
+[
+    {
+        "user": "Admin",
+        "email": "admin@silvex.com",
+        "event": "Login exitoso (Admin)",
+        "ip": "::1",
+        "timestamp": "2026-04-19 11:57:30"
+    },
+    {
+        "user": "Admin",
+        "email": "admin@silvex.com",
+        "event": "Login exitoso (Admin)",
+        "ip": "::1",
+        "timestamp": "2026-04-19 12:03:15"
+    },
+    {
+        "user": "Admin",
+        "email": "admin@silvex.com",
+        "event": "Login exitoso (Admin)",
+        "ip": "::1",
+        "timestamp": "2026-04-19 12:09:22"
+    },
+    {
+        "user": "Loren",
+        "email": "loren@silvex.com",
+        "event": "Login exitoso (Cliente)",
+        "ip": "::1",
+        "timestamp": "2026-04-19 12:25:26"
+    }
+]

@@ -5,7 +5,11 @@
     "name": "Campaña Lanzamiento 2024",
     "status": "En Ejecución",
     "progress": 65,
-    "lastUpdate": "2024-04-15"
+    "lastUpdate": "2024-04-15",
+    "metrics": {
+      "labels": ["Sem 1", "Sem 2", "Sem 3", "Sem 4"],
+      "data": [120, 190, 300, 500]
+    }
   },
   {
     "id": "p2",
@@ -13,7 +17,11 @@
     "name": "Gestión Redes Sociales",
     "status": "Iniciado",
     "progress": 20,
-    "lastUpdate": "2024-04-16"
+    "lastUpdate": "2024-04-16",
+    "metrics": {
+      "labels": ["Ene", "Feb", "Mar", "Abr"],
+      "data": [50, 45, 60, 80]
+    }
   },
   {
     "id": "p3",
@@ -21,6 +29,10 @@
     "name": "Branding Corporativo",
     "status": "Finalizado",
     "progress": 100,
-    "lastUpdate": "2024-04-12"
+    "lastUpdate": "2024-04-12",
+    "metrics": {
+      "labels": ["Fase 1", "Fase 2", "Final"],
+      "data": [100, 200, 350]
+    }
   }
 ]

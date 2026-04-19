@@ -71,3 +71,94 @@ class DataHelper {
         return !empty($results) ? array_shift($results) : null;
     }
 }
+
+/**
+ * Registra un evento de actividad en activity_log.json
+ */
+function silvex_log_activity(string $userName, string $userEmail, string $event): void {
+    $logFile = DATA_PATH . 'activity_log.json';
+    $logs = [];
+    if (file_exists($logFile)) {
+        $logs = json_decode(file_get_contents($logFile), true) ?: [];
+    }
+    $logs[] = [
+        'user'      => $userName,
+        'email'     => $userEmail,
+        'event'     => $event,
+        'ip'        => $_SERVER['REMOTE_ADDR'] ?? 'N/A',
+        'timestamp' => date('Y-m-d H:i:s'),
+    ];
+    // Mantener los últimos 200 registros
+    if (count($logs) > 200) {
+        $logs = array_slice($logs, -200);
+    }
+    if (!is_dir(DATA_PATH)) mkdir(DATA_PATH, 0777, true);
+    file_put_contents($logFile, json_encode($logs, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+}
+
+/**
+ * Añade una notificación interna para un cliente específico.
+ */
+function silvex_add_notification(string $clientId, string $title, string $message, string $type = 'info'): void {
+    $notifFile = DATA_PATH . 'notifications.json';
+    $notifs = [];
+    if (file_exists($notifFile)) {
+        $notifs = json_decode(file_get_contents($notifFile), true) ?: [];
+    }
+    
+    $notifs[] = [
+        'id' => uniqid('notif_'),
+        'client_id' => $clientId,
+        'title' => $title,
+        'message' => $message,
+        'type' => $type, // info, success, warning
+        'is_read' => false,
+        'created_at' => date('Y-m-d H:i:s')
+    ];
+    
+    if (!is_dir(DATA_PATH)) mkdir(DATA_PATH, 0777, true);
+    file_put_contents($notifFile, json_encode($notifs, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+}
+
+/**
+ * Obtiene notificaciones para un cliente.
+ */
+function silvex_get_notifications(string $clientId): array {
+    $notifFile = DATA_PATH . 'notifications.json';
+    if (!file_exists($notifFile)) return [];
+    
+    $notifs = json_decode(file_get_contents($notifFile), true) ?: [];
+    $clientNotifs = array_filter($notifs, function($n) use ($clientId) {
+        return isset($n['client_id']) && $n['client_id'] === $clientId;
+    });
+    
+    // Sort by created_at desc
+    usort($clientNotifs, function($a, $b) {
+        return strtotime($b['created_at']) <=> strtotime($a['created_at']);
+    });
+    
+    return $clientNotifs;
+}
+
+/**
+ * Marca las notificaciones de un cliente como leídas.
+ */
+function silvex_mark_notifications_read(string $clientId): void {
+    $notifFile = DATA_PATH . 'notifications.json';
+    if (!file_exists($notifFile)) return;
+    
+    $notifs = json_decode(file_get_contents($notifFile), true) ?: [];
+    $changed = false;
+    
+    foreach ($notifs as &$n) {
+        if (isset($n['client_id']) && $n['client_id'] === $clientId && !$n['is_read']) {
+            $n['is_read'] = true;
+            $changed = true;
+        }
+    }
+    unset($n);
+    
+    if ($changed) {
+        file_put_contents($notifFile, json_encode($notifs, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+    }
+}

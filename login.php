@@ -25,6 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['user_email'] = $email;
             $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
             $_SESSION['logout_token'] = bin2hex(random_bytes(32));
+            silvex_log_activity('Admin', 'admin@silvex.com', 'Login exitoso (Admin)');
             header('Location: admin/index.php');
             exit;
         } 
@@ -39,6 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['client_name'] = $client['name'];
             $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
             $_SESSION['logout_token'] = bin2hex(random_bytes(32));
+            silvex_log_activity($client['name'], $client['login_email'], 'Login exitoso (Cliente)');
             header('Location: clientes/index.php');
             exit;
         }
